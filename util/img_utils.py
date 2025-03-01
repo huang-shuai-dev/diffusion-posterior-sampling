@@ -186,9 +186,8 @@ class pilot_generator:
     #TODO def _retrieve_qpsk(self, img):
 
     def _retrieve_random(self, img):
-        pilot_b = torch.rand((self.image_size, self.pilot_length, 3)) * 2 - 1
-        pilot = torch.ones_like(img, device=img.device)
-        pilot[:, ...] = pilot_b
+        pilot = torch.rand((3,self.image_size, self.pilot_length)) * 2 - 1
+        pilot = pilot.unsqueeze(dim=0)
         return pilot
 
     def __call__(self, img):
