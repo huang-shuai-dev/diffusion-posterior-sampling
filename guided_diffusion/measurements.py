@@ -172,8 +172,7 @@ class ChannelEstimationOperator(LinearOperator):
         if(self.quantize_bit == 0):
             return result
         else:
-            #return self.quantize_image(result, num_levels=2**self.quantize_bit)
-            return self.quantize_image(result, num_levels=2**self.quantize_bit)
+            return self.quantize_image(result, 2**self.quantize_bit)
     
     def transpose(self, data, **kwargs):
         return data
