@@ -10,7 +10,7 @@ data:
 measurement:
   operator:
     name: channel_estimation
-  quant_bit: 8
+    quantize_bit: 8
   pilot: 
     num: 16
     type: QPSK

@@ -152,16 +152,28 @@ class InpaintingOperator(LinearOperator):
         return data - self.forward(data, **kwargs)
 
 @register_operator(name='channel_estimation')
-class InpaintingOperator(LinearOperator):
+class ChannelEstimationOperator(LinearOperator):
     '''This operator get pre-defined mask and return masked image.'''
-    def __init__(self, device):
+    def __init__(self, device,quantize_bit=0):
         self.device = device
+        self.quantize_bit = quantize_bit
+
+    def quantize_image(img, num_levels=256):
+        pixel_mean = img.mean(dim=1, keepdim=True) 
+        quantized_img = torch.round((img - pixel_mean) * (num_levels - 1) / 2 + (num_levels - 1) / 2)
+        quantized_img = torch.clamp(quantized_img, 0, num_levels - 1)
+        quantized_img = quantized_img / (num_levels - 1)
+        return quantized_img
 
     def forward(self, data, **kwargs):
         pilot = kwargs.get('pilot', None)
         pilot.to(self.device)
         result = torch.stack([torch.matmul(data[:, c, :, :].to(self.device), pilot[:, c, :, :].to(self.device)) for c in range(data.shape[1])], dim=1)
-        return result
+        if(quantize_bit == 0):
+            return result
+        else:
+            #return self.quantize_image(result, num_levels=2**self.quantize_bit)
+            return self.quantize_image(result, num_levels=2**self.quantize_bit)
     
     def transpose(self, data, **kwargs):
         return data
