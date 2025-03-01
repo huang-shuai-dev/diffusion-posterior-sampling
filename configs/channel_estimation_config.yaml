@@ -14,6 +14,11 @@ measurement:
   pilot: 
     num: 16
     type: QPSK
+  mask_opt:
+    mask_type: random
+    # mask_len_range: !!python/tuple [128, 129]  # for box
+    mask_prob_range: !!python/tuple [0.3, 0.7]  # for random
+    image_size: 256
 
   noise: 
     name: gaussian
