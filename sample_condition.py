@@ -12,7 +12,7 @@ from guided_diffusion.measurements import get_noise, get_operator
 from guided_diffusion.unet import create_model
 from guided_diffusion.gaussian_diffusion import create_sampler
 from data.dataloader import get_dataset, get_dataloader
-from util.img_utils import clear_color, mask_generator
+from util.img_utils import clear_color, mask_generator, pilot_generator
 from util.logger import get_logger
 
 
