@@ -162,7 +162,7 @@ class InpaintingOperator(LinearOperator):
         pilot.to(self.device)
         if data.shape[1] != pilot.shape[0]:
             raise ValueError("the dimension of the two images is not matched.")
-        result = torch.stack([torch.matmul(data[:, :, c], pilot[:, :, c]) for c in range(3)], dim=2)
+        result = torch.stack([torch.matmul(data[:, :, c].to(self.device), pilot[:, :, c].to(self.device)) for c in range(3)], dim=2)
         return result
     
     def transpose(self, data, **kwargs):

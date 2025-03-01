@@ -174,18 +174,21 @@ def random_sq_bbox(img, mask_shape, image_size=256, margin=(16, 16)):
     return mask, t, t+h, l, l+w
 
 class pilot_generator:
-    def __init__(self, pilot_type='RANDOM', pilot_length=32):
+    def __init__(self, pilot_type='RANDOM', pilot_length=32,image_size=256):
         """
         pilot_type: 'RAND', 'QPSK'
         """
         assert pilot_type in ['RANDOM']
         self.pilot_type = pilot_type
         self.pilot_length = pilot_length
+        self.image_size = image_size
 
     #TODO def _retrieve_qpsk(self, img):
 
     def _retrieve_random(self, img):
-        pilot = torch.rand((img.shape[1], self.pilot_length, 3)) * 2 - 1
+        pilot_b = torch.rand((self.image_size, self.pilot_length, 3)) * 2 - 1
+        pilot = torch.ones_like(img, device=img.device)
+        pilot[:, ...] = pilot_b
         return pilot
 
     def __call__(self, img):
