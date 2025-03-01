@@ -160,8 +160,6 @@ class InpaintingOperator(LinearOperator):
     def forward(self, data, **kwargs):
         pilot = kwargs.get('pilot', None)
         pilot.to(self.device)
-        if data.shape[1] != pilot.shape[0]:
-            raise ValueError("the dimension of the two images is not matched.")
         result = torch.stack([torch.matmul(data[:, :, c].to(self.device), pilot[:, :, c].to(self.device)) for c in range(3)], dim=2)
         return result
     
