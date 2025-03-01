@@ -151,7 +151,24 @@ class InpaintingOperator(LinearOperator):
     def ortho_project(self, data, **kwargs):
         return data - self.forward(data, **kwargs)
 
-
+@register_operator(name='channel_estimation')
+class InpaintingOperator(LinearOperator):
+    '''This operator get pre-defined mask and return masked image.'''
+    def __init__(self, device):
+        self.device = device
+    
+    def forward(self, data, **kwargs):
+        try:
+            return data * kwargs.get('mask', None).to(self.device)
+        except:
+            raise ValueError("Require mask")
+    
+    def transpose(self, data, **kwargs):
+        return data
+    
+    def ortho_project(self, data, **kwargs):
+        return data - self.forward(data, **kwargs)
+        
 class NonLinearOperator(ABC):
     @abstractmethod
     def forward(self, data, **kwargs):
