@@ -190,7 +190,7 @@ class pilot_generator:
         return pilot
 
     def __call__(self, img):
-        if self.mask_type == 'RANDOM':
+        if self.pilot_type == 'RANDOM':
             pilot = self._retrieve_random(img)
             return pilot
 
