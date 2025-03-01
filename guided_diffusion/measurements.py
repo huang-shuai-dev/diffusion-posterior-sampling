@@ -156,12 +156,13 @@ class InpaintingOperator(LinearOperator):
     '''This operator get pre-defined mask and return masked image.'''
     def __init__(self, device):
         self.device = device
-    
+
     def forward(self, data, **kwargs):
-        try:
-            return data * kwargs.get('mask', None).to(self.device)
-        except:
-            raise ValueError("Require mask")
+    
+        if data.shape[1] != pilot.shape[0]:
+            raise ValueError("the dimension of the two images is not matched.")
+        result = torch.stack([torch.matmul(data[:, :, c], pilot[:, :, c]) for c in range(3)], dim=2)
+        return result
     
     def transpose(self, data, **kwargs):
         return data

@@ -88,9 +88,7 @@ def main():
         )
 
     if measure_config['operator']['name'] == 'channel_estimation':
-        mask_gen = mask_generator(
-           **measure_config['mask_opt']
-        )
+        pilot_gen = pilot_generator()
         
     # Do Inference
     for i, ref_img in enumerate(loader):
@@ -109,13 +107,12 @@ def main():
             y = operator.forward(ref_img, mask=mask)
             y_n = noiser(y)
         elif measure_config['operator'] ['name'] == 'channel_estimation':
-            mask = mask_gen(ref_img)
-            mask = mask[:, 0, :, :].unsqueeze(dim=0)
-            measurement_cond_fn = partial(cond_method.conditioning, mask=mask)
+            pilot = pilot_gen(ref_img)
+            measurement_cond_fn = partial(cond_method.conditioning, pilot=pilot)
             sample_fn = partial(sample_fn, measurement_cond_fn=measurement_cond_fn)
 
             # Forward measurement model (Ax + n)
-            y = operator.forward(ref_img, mask=mask)
+            y = operator.forward(ref_img, pilot=pilot)
             y_n = noiser(y)
         else: 
             # Forward measurement model (Ax + n)
