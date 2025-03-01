@@ -169,7 +169,7 @@ class ChannelEstimationOperator(LinearOperator):
         pilot = kwargs.get('pilot', None)
         pilot.to(self.device)
         result = torch.stack([torch.matmul(data[:, c, :, :].to(self.device), pilot[:, c, :, :].to(self.device)) for c in range(data.shape[1])], dim=1)
-        if(quantize_bit == 0):
+        if(self.quantize_bit == 0):
             return result
         else:
             #return self.quantize_image(result, num_levels=2**self.quantize_bit)
