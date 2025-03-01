@@ -160,7 +160,7 @@ class InpaintingOperator(LinearOperator):
     def forward(self, data, **kwargs):
         pilot = kwargs.get('pilot', None)
         pilot.to(self.device)
-        result = torch.stack([torch.matmul(data[:, :, c].to(self.device), pilot[:, :, c].to(self.device)) for c in range(3)], dim=2)
+        result = torch.stack([torch.matmul(data[:, c, :, :].to(self.device), pilot[:, c, :, :].to(self.device)) for c in range(data.shape[1])], dim=1)
         return result
     
     def transpose(self, data, **kwargs):
