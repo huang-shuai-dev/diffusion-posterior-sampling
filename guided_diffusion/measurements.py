@@ -158,7 +158,7 @@ class ChannelEstimationOperator(LinearOperator):
         self.device = device
         self.quantize_bit = quantize_bit
 
-    def quantize_image(img, num_levels=256):
+    def quantize_image(self, img, num_levels=256):
         pixel_mean = img.mean(dim=1, keepdim=True) 
         quantized_img = torch.round((img - pixel_mean) * (num_levels - 1) / 2 + (num_levels - 1) / 2)
         quantized_img = torch.clamp(quantized_img, 0, num_levels - 1)
